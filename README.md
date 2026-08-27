@@ -146,14 +146,16 @@ Copy `.env.example` to `.env` and fill in:
 | Variable | Purpose |
 | --- | --- |
 | `DATABASE_URL` | Postgres connection string (aliased to `NEON_DATABASE_URL` in config) |
-| `LLAMA_CLOUD_API_KEY` | LlamaParse PDF parsing (`_1` / `_2` supported for rotation) |
+| `LLAMA_CLOUD_API_KEY_1` | LlamaParse PDF parsing. **Numbered, not bare** — `parse_documents.py` reads `_1`/`_2`/`_3` and rotates across whichever are set; `_1` is required |
 | `FIRECRAWL_API_KEY` | HTML crawling |
 | `VOYAGE_API_KEY` | Dense embeddings and reranking |
-| `GEMINI_API_KEY` | Generation, image captioning, RAGAS judge (`_2`, `_3` rotate) |
+| `GEMINI_API_KEY` | Generation, image captioning, RAGAS judge. `GEMINI_API_KEY_1` is equivalent; `_2`/`_3` are optional and rotate to raise the per-minute quota |
 | `VOYAGE_EMBED_MODEL` | default `voyage-3-large` (1024-dim) |
 | `VOYAGE_RERANK_MODEL` | default `rerank-2.5` |
 | `GEMINI_MODEL` | default `gemini-2.5-flash` |
 | `SPLADE_MODEL` | default `naver/splade-cocondenser-ensembledistil` |
+
+The RAGAS judge is not separately configurable — it reuses `GEMINI_MODEL`.
 
 `.env` is gitignored. Never commit it.
 
