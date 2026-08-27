@@ -1,0 +1,31 @@
+# Local Postgres + pgvector for the RAG store.
+# Replaces the Neon cloud DB: storage is bounded by your disk, not 0.5 GB.
+# The image bundles pgvector >= 0.8, so halfvec / sparsevec in schema.sql work.
+#
+#   docker compose up -d          # start (data persists in the named volume)
+#   python scripts/create_database.py   # apply schema.sql
+#   docker compose down           # stop (keeps data)
+#   docker compose down -v        # stop AND delete all data
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: theshift_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ragdb
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ragpass   # change this; keep it in sync with .env
+    # Host port 15432 (not 5432): Windows reserves 5413-5812 via Hyper-V/winnat,
+    # which blocks binding anything in that range on the host. Container port stays 5432.
+    ports:
+      - "15432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U raguser -d ragdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

@@ -1,0 +1,13 @@
+pydantic>=2.7
+pydantic-settings>=2.2
+python-dotenv>=1.0
+psycopg[binary]>=3.1
+pgvector>=0.2
+pandas>=2.2
+beautifulsoup4>=4.12
+trafilatura>=1.9
+llama-parse>=0.4
+google-genai>=1.0
+voyageai>=0.3
+tenacity>=8.2
+tqdm>=4.66

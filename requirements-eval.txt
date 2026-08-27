@@ -1,0 +1,5 @@
+ragas>=0.1.9
+datasets>=2.19
+pytest>=8.0
+# Gemini judge LLM for RAGAS metrics (langchain wrapper).
+langchain-google-genai>=4.0

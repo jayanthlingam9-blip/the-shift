@@ -1,0 +1,64 @@
+{
+  "overall": {
+    "faithfulness": 0.9839,
+    "answer_relevancy": 0.4693,
+    "context_precision": 0.6884,
+    "context_recall": 0.9048,
+    "count": 28
+  },
+  "in_scope": {
+    "faithfulness": 0.9813,
+    "answer_relevancy": 0.5476,
+    "context_precision": 0.6884,
+    "context_recall": 0.8889,
+    "count": 24
+  },
+  "by_domain": {
+    "finance": {
+      "faithfulness": 0.9778,
+      "answer_relevancy": 0.6273,
+      "context_precision": 0.6667,
+      "context_recall": 0.9074,
+      "count": 9
+    },
+    "healthcare": {
+      "faithfulness": 0.9583,
+      "answer_relevancy": 0.4027,
+      "context_precision": 0.4,
+      "context_recall": 0.75,
+      "count": 6
+    },
+    "legal": {
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.5644,
+      "context_precision": 0.8704,
+      "context_recall": 0.963,
+      "count": 9
+    },
+    "out_of_scope": {
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.0,
+      "context_precision": null,
+      "context_recall": 1.0,
+      "count": 4
+    }
+  },
+  "coverage": {
+    "faithfulness": {
+      "scored": 28,
+      "total": 28
+    },
+    "answer_relevancy": {
+      "scored": 28,
+      "total": 28
+    },
+    "context_precision": {
+      "scored": 23,
+      "total": 28
+    },
+    "context_recall": {
+      "scored": 28,
+      "total": 28
+    }
+  }
+}
