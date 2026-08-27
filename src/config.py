@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     gemini_max_workers_per_key: int = 2
 
     gemini_model: str = "gemini-2.5-flash"
+    # Judge model for RAGAS metric scoring. Unset means "reuse
+    # gemini_model"; set RAGAS_JUDGE_MODEL to score with a different (e.g.
+    # stronger or cheaper) model than the one generating the answers.
+    ragas_judge_model: str | None = None
     voyage_embed_model: str = "voyage-3-large"
     voyage_rerank_model: str = "rerank-2.5"
     splade_model: str = "naver/splade-cocondenser-ensembledistil"

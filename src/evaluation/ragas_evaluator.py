@@ -120,11 +120,36 @@ def _round_robin_llm(wrappers: list):
     return _RoundRobinLLM(wrappers)
 
 
+def _resolve_judge_model() -> str:
+    """The Gemini model the RAGAS judge scores with.
+
+    RAGAS_JUDGE_MODEL (settings.ragas_judge_model) overrides GEMINI_MODEL so
+    metrics can be scored by a different model than the one generating the
+    answers. The judge is a ChatGoogleGenerativeAI client, so the value must be
+    a Gemini model id -- an OpenRouter/OpenAI/Anthropic id here would only fail
+    much later, inside a RAGAS metric, as an opaque 404. Fail fast instead.
+    """
+    override = (settings.ragas_judge_model or "").strip()
+    if not override:
+        return settings.gemini_model
+    if not override.startswith("gemini-"):
+        raise RuntimeError(
+            f"RAGAS_JUDGE_MODEL={override!r} is not a Gemini model id. The RAGAS "
+            "judge runs on the Gemini API (ChatGoogleGenerativeAI), so it cannot "
+            "serve models from other providers. Set a 'gemini-*' id, or unset "
+            "RAGAS_JUDGE_MODEL to reuse GEMINI_MODEL "
+            f"({settings.gemini_model!r})."
+        )
+    return override
+
+
 def _build_judge():
     """Construct the (llm, embeddings) RAGAS judges. Imported lazily.
 
     The judge LLM round-robins across the Gemini keys not used by generation,
-    so metric scoring is spread over multiple per-key rate limits.
+    so metric scoring is spread over multiple per-key rate limits. The judge
+    model is settings.ragas_judge_model (RAGAS_JUDGE_MODEL) when set, falling
+    back to settings.gemini_model.
     """
     from langchain_google_genai import ChatGoogleGenerativeAI
     from ragas.embeddings import LangchainEmbeddingsWrapper
@@ -133,17 +158,21 @@ def _build_judge():
     # bypass_n=True: Gemini rejects n>1 ("Multiple candidates is not enabled"),
     # which answer_relevancy/context_precision trigger. With bypass_n, ragas
     # issues n separate single-candidate calls instead of one n>1 call.
+    judge_model = _resolve_judge_model()
+
     wrappers = [
         LangchainLLMWrapper(
             ChatGoogleGenerativeAI(
-                model=settings.gemini_model, google_api_key=key, temperature=0.0
+                model=judge_model, google_api_key=key, temperature=0.0
             ),
             bypass_n=True,
         )
         for key in _judge_keys()
     ]
     llm = wrappers[0] if len(wrappers) == 1 else _round_robin_llm(wrappers)
-    print(f"  [ragas] judge LLM rotating over {len(wrappers)} Gemini key(s)")
+    print(
+        f"  [ragas] judge LLM {judge_model} rotating over {len(wrappers)} Gemini key(s)"
+    )
     return llm, LangchainEmbeddingsWrapper(_VoyageEmbeddings())
 
 

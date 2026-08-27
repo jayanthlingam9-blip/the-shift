@@ -155,7 +155,10 @@ Copy `.env.example` to `.env` and fill in:
 | `GEMINI_MODEL` | default `gemini-2.5-flash` |
 | `SPLADE_MODEL` | default `naver/splade-cocondenser-ensembledistil` |
 
-The RAGAS judge is not separately configurable — it reuses `GEMINI_MODEL`.
+Set `RAGAS_JUDGE_MODEL` to score the RAGAS metrics with a different model than the one
+generating answers; it defaults to `GEMINI_MODEL`. The judge runs on the Gemini API, so the
+value must be a `gemini-*` id — anything else is rejected at startup rather than failing later
+as an opaque 404 inside a metric.
 
 `.env` is gitignored. Never commit it.
 
