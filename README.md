@@ -113,15 +113,16 @@ pip install -r requirements.txt
 ```
 
 > **LlamaCloud SDK conflict.** [`pdf_parser.py`](src/parsing/pdf_parser.py) targets the
-> Stainless-generated **`llama-cloud==2.8.0`** SDK. Do **not** install `llama-parse` or
-> `llama-cloud-services` — they hard-pin `llama-cloud==0.1.46` (the older Fern SDK, incompatible
-> API) under the same `llama_cloud` import name, which corrupts the install and yields
+> Stainless-generated **`llama-cloud==2.8.0`** SDK, which `requirements-core.txt` pins exactly for
+> this reason. Do **not** add `llama-parse` or `llama-cloud-services` — they hard-pin
+> `llama-cloud==0.1.46` (the older Fern SDK, incompatible API) under the same `llama_cloud` import
+> name, so installing either overwrites the pin and breaks parsing with
 > `ImportError: cannot import name 'FilesResource'`. Recovery: uninstall all three, delete the
 > leftover `site-packages/llama_cloud/` folder and stray `*.dist-info`, then
 > `pip install --no-cache-dir "llama-cloud==2.8.0"`.
 
-Dependency groups: `requirements-core.txt` (parsing, DB, API clients) · `requirements-ml.txt`
-(torch/transformers for SPLADE) · `requirements-eval.txt` (RAGAS, pytest) ·
+Dependency groups: `requirements-core.txt` (parsing, DB, image triage, API clients) ·
+`requirements-ml.txt` (torch/transformers for SPLADE) · `requirements-eval.txt` (RAGAS, pytest) ·
 `requirements-notebook.txt` (JupyterLab). `requirements.txt` pulls in all four.
 
 ### 2. Database

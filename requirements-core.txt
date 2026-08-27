@@ -5,9 +5,26 @@ psycopg[binary]>=3.1
 pgvector>=0.2
 pandas>=2.2
 beautifulsoup4>=4.12
-trafilatura>=1.9
-llama-parse>=0.4
+tiktoken>=0.7
+
+# PDF parsing. PINNED, and deliberately NOT llama-parse.
+# src/parsing/pdf_parser.py is built on the Stainless-generated llama-cloud
+# SDK (LlamaCloud, client.files.create, client.parsing.parse). The high-level
+# `llama-parse` / `llama-cloud-services` wrappers hard-pin llama-cloud==0.1.46
+# (the older Fern SDK, incompatible API) under the SAME `llama_cloud` import
+# name, so installing either one overwrites this and breaks parsing with
+# `ImportError: cannot import name 'FilesResource'`. Do not add them.
+llama-cloud==2.8.0
+
+# HTML crawling (src/parsing/html_parser.py).
+firecrawl-py>=4.0
+
+# Image triage + captioning (src/normalization/image_filter.py,
+# image_captioning.py). imagehash powers near-duplicate detection; the filter
+# degrades gracefully to exact-hash dedupe if it is absent.
+pillow>=10.0
+imagehash>=4.3
+
+# Generation and embeddings / reranking.
 google-genai>=1.0
 voyageai>=0.3
-tenacity>=8.2
-tqdm>=4.66

@@ -1,5 +1,11 @@
-ragas>=0.1.9
+# RAGAS evaluation. Bounded to 0.4.x: ragas 0.4's llms/base.py hard-imports a
+# langchain_community VertexAI module that current langchain-community no
+# longer ships, and src/evaluation/ragas_evaluator._ensure_ragas_importable
+# shims exactly that. A different major would need a different shim.
+ragas>=0.4,<0.5
 datasets>=2.19
-pytest>=8.0
-# Gemini judge LLM for RAGAS metrics (langchain wrapper).
+
+# Gemini judge LLM for the RAGAS metrics (langchain wrapper).
 langchain-google-genai>=4.0
+
+pytest>=8.0

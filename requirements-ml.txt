@@ -1,5 +1,5 @@
+# SPLADE learned-sparse embeddings (src/embeddings/splade_embeddings.py) run
+# on transformers + torch directly -- no sentence-transformers wrapper.
 numpy>=1.26
-scipy>=1.12
 torch>=2.2
 transformers>=4.40
-sentence-transformers>=2.7
